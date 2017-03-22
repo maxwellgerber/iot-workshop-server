@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<title>IoT Test</title>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<script>
+			$(function () {
+				var socket = io();
+				socket.on('update', function(msg){
+					var output = "";
+					for (var i = 0; i < msg.length; i++) {
+						output += "<p>Value " + i + ": " + msg[i] + "</p>";
+					}
+					$('#test').html(output);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<span id="test"></span>
+	</body>
+</html>
+
