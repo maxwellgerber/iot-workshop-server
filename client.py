@@ -1,31 +1,21 @@
-import socket
-import random
+from socketIO_client import SocketIO
 import serial
-import time
 import argparse
 
 #read in port and station
-parser = argparse.ArgumentParser(description='Process station number and port number.')
-parser.add_argument('--station')
-parser.add_argument('--port')
+parser = argparse.ArgumentParser(description='Python utility for HKN IoT Workshop.')
+parser.add_argument('--station', help="The station number you are at", type=int, required=True)
+parser.add_argument('--port', help="The com port of the MSP you are using", required=True)
 args = parser.parse_args()
 station = int(args.station)
 port = args.port
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(('localhost', 7000))
 ser = serial.Serial(port)
 
+with SocketIO('hkn-iot-workshop.herokuapp.com', 80) as sock:
+	while True:
+		value = ser.readline()
+		cleaned = value.decode("utf-8").strip() 
+		print("Transmittiong {}".format(cleaned))
+		sock.emit('data', {'i':station, 'd':cleaned}) 
 
-def iot(index, value):
-    msg = '{"index": '+str(index)+', "value": '+str(value).strip()+'}'
-    print "sending {}".format(msg)
-    s.send(str.encode(msg))
-
-def test():
-    while True:
-        value = ser.readline()
-        print value
-        iot(station, value)
-
-test()
