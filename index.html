@@ -59,6 +59,9 @@
 			padding-bottom: 20px;
 			padding-top: 25px;
 		}
+		#reset{
+			margin-left:125px;
+		}
 	</style>
 	<script>
 		$(function () {
@@ -148,6 +151,10 @@
 				})
 			});
 
+			$("#reset").click(function(){
+				socket.emit("reset");
+			})
+
 		});	
 	</script>
 </head>
@@ -159,7 +166,7 @@
 			<h1 class="display-3">HKN IoT Workshop</h1>
 			<p class="lead">Red = Disconnected</p>
 			<p class="lead">Green = Connected but no data</p>
-			<p class="lead">Black-Yellow = Connected - color indicates light intensity</p>
+			<p class="lead">Black-Yellow = Connected - color indicates light intensity <button id="reset" class="btn btn-danger pull-right">Reset</button></p>
 		</div>
 	</div>
 	<div class="container-fluid" style="margin-left:auto; margin-right:auto">

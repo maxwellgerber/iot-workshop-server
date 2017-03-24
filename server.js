@@ -12,14 +12,24 @@ var io = require('socket.io').listen(server);
 app.use(express.static('.'));
 
 var data = new Array(40);
-for (var i = 0; i < data.length; i++) {
-	data[i] = -1;
+
+function reset_data(argument) {
+	for (var i = 0; i < data.length; i++) {
+		data[i] = -1;
+	}
 }
+
+reset_data();
 
 io.on('connection', function (socket){
 	socket.on('data', function (d) {
 		console.log(d);
 		data[d.i] = d.d;
+	})
+
+	socket.on('reset', function (d) {
+		console.log("Resetting data now");
+		reset_data();
 	})
 })
 
