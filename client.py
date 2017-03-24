@@ -2,10 +2,19 @@ import socket
 import random
 import serial
 import time
+import argparse
+
+#read in port and station
+parser = argparse.ArgumentParser(description='Process station number and port number.')
+parser.add_argument('--station')
+parser.add_argument('--port')
+args = parser.parse_args()
+station = int(args.station)
+port = args.port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(('localhost', 7000))
-ser = serial.Serial("/dev/cu.usbmodem14223")
+ser = serial.Serial(port)
 
 
 def iot(index, value):
@@ -17,6 +26,6 @@ def test():
     while True:
         value = ser.readline()
         print value
-        iot(1,value)
+        iot(station, value)
 
 test()
