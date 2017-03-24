@@ -1,49 +1,20 @@
 from socketIO_client import SocketIO
+import serial
+import argparse
 
-def on_connect():
-    print('connect')
+#read in port and station
+parser = argparse.ArgumentParser(description='Process station number and port number.')
+parser.add_argument('--station')
+parser.add_argument('--port')
+args = parser.parse_args()
+station = int(args.station)
+port = args.port
 
-def on_disconnect():
-    print('disconnect')
+ser = serial.Serial(port)
 
-def on_reconnect():
-    print('reconnect')
-
-def on_aaa_response(*args):
-    print('on_aaa_response', args)
-
-print('shit')
-socketIO = SocketIO('hkn-iot-workshop.herokuapp.com', 80)
-socketIO.emit('data', {'i':1, 'd': 4}) 
-socketIO.emit('data', {'i':2, 'd': 4000}) 
-socketIO.emit('data', {'i':3, 'd': 2333}) 
-socketIO.emit('data', {'i':4, 'd': 400}) 
-socketIO.emit('data', {'i':4, 'd': 33}) 
-socketIO.emit('data', {'i':5, 'd': .34}) 
-socketIO.emit('data', {'i':6, 'd': .114}) 
-socketIO.wait(seconds=5)
-print('shit')
-
-# print("shit")
-# import serial
-# import socket
-# import random
-# import time
-
-# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# s.connect(('10.142.38.175', 7000))
-# ser = serial.Serial("/dev/cu.usbmodem14223")
-
-
-# def iot(index, value):
-#     msg = '{"index": '+str(index)+', "value": '+str(value).strip()+'}'
-#     print "sending {}".format(msg)
-#     s.send(str.encode(msg))
-
-# def test():
-#     while True:
-#         value = ser.readline()
-#         print value
-#         iot(1,value)
-
-# test()
+with SocketIO('hkn-iot-workshop.herokuapp.com', 80) as sock:
+	while True:
+		value = ser.readline()
+		value = value.decode("utf-8").strip() 
+		print(value)
+		sock.emit('data', {'i':station, 'd':value}) 
