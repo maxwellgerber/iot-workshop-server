@@ -19,9 +19,9 @@ udp.on('message', function (message, remote) {
 });
 udp.bind(7000, "localhost");
 
-var data = new Array(5);
+var data = new Array(40);
 for (var i = 0; i < data.length; i++) {
-	data[i] = 0;
+	data[i] = -1;
 }
 
 setInterval(function () { io.emit('update', data); }, 33);
